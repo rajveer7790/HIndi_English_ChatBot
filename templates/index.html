@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hinglish Gemini Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; }
+        #chatbox { width: 100%; max-width: 500px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ccc; padding: 20px; }
+        #messages { min-height: 300px; margin-bottom: 15px; }
+        .msg { margin: 8px 0; }
+        .user { color: #1976d2; font-weight: bold; }
+        .bot { color: #388e3c; font-weight: bold; }
+        #user_input { width: 80%; padding: 8px; }
+        #send_btn { padding: 8px 16px; }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <h2>Hinglish Gemini Chatbot</h2>
+        <div id="messages"></div>
+        <form id="chat_form">
+            <input type="text" id="user_input" placeholder="Type Hinglish message..." autocomplete="off" required />
+            <button type="submit" id="send_btn">Send</button>
+        </form>
+    </div>
+    <script>
+        // English: Handle chat form submit
+        // Hindi: Chat form bhejne par handle karein
+        const form = document.getElementById('chat_form');
+        const input = document.getElementById('user_input');
+        const messages = document.getElementById('messages');
+
+        form.onsubmit = async function(e) {
+            e.preventDefault();
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+            addMessage('User', userMsg, 'user');
+            input.value = '';
+            // Send to backend
+            const formData = new FormData();
+            formData.append('user_message', userMsg);
+            addMessage('Assistant', '...', 'bot'); // Loading
+            const resp = await fetch('/chat', { method: 'POST', body: formData });
+            const data = await resp.json();
+            // Remove loading
+            messages.removeChild(messages.lastChild);
+            addMessage('Assistant', data.reply, 'bot');
+        };
+
+        function addMessage(sender, text, cls) {
+            const div = document.createElement('div');
+            div.className = 'msg ' + cls;
+            div.innerHTML = `<span class="${cls}">${sender}:</span> ${text}`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+</body>
+</html> 
