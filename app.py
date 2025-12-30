@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 import google.generativeai as genai
 
 # Set your Gemini API key here
-GEMINI_API_KEY = "AIzaSyBWPvMdbuLq3G7YEVk_JAnivd43YPePVHA"
+GEMINI_API_KEY = ""
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = FastAPI()
